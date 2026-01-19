@@ -16,8 +16,6 @@
         }
         .clickable-zone {
             position: fixed;
-            top: 20px;
-            left: 30%;
             width: 50px;
             height: 50px;
             background-color: transparent;
@@ -27,6 +25,77 @@
         .clickable-zone:hover {
             background-color: transparent;
         }
+        .zone-1 {
+            top: 20px;   
+            left: 30px; 
+        }
+
+        .zone-2 {
+            top: 30px;
+            left: 40%;
+        }
+
+        .zone-3 {
+            top: 500px;
+            left: 20%;
+        }
+        .video-container {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .video-container.active {
+            display: block;
+        }
+
+        .video-container video {
+            width: 100%;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        body.debug .clickable-zone {
+            background: rgba(255, 0, 0, 0.25);
+            outline: 2px dashed red;
+        }
+    </style>
+</head>
+
+<body class="debug">
+
+    <div class="clickable-zone zone-1" onclick="showVideo('video1')"></div>
+    <div class="clickable-zone zone-2" onclick="showVideo('video2')"></div>
+    <div class="clickable-zone zone-3" onclick="openAffiliate('link1')"></div>
+
+    <div class="video-container" id="videoContainer">
+        <button class="close-btn" onclick="closeVideo()">×</button>
+        <video id="videoPlayer" controls muted></video>
+    </div>
+
+    <script>
+
+        const videos = {
+            video1: "video1.mp4",  // remplace par ton fichier
+            video2: "video2.mp4"
+        };
+
         .video-container {
             display: none;
             position: fixed;
@@ -162,6 +231,7 @@
     </script>
 </body>
 </html>
+
 
 
 
