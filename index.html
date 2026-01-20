@@ -15,7 +15,7 @@
             background-attachment: fixed;
         }
 
-        /* clickable zones: vivid blue so you can see & move them */
+        /* clickable zones: vivid blue so you can see & move them manually in HTML/CSS */
         .clickable-zone {
             position: fixed;
             width: 50px;
@@ -24,9 +24,8 @@
             border: 2px solid #ffffffcc;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-            cursor: grab;
+            cursor: pointer;
             z-index: 60;
-            touch-action: none; /* allow touch dragging */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -34,7 +33,6 @@
             font-weight: bold;
             user-select: none;
         }
-        .clickable-zone.dragging { cursor: grabbing; opacity: .95; transform: scale(1.03); }
 
         .clickable-zone:hover { filter: brightness(1.05); }
 
@@ -168,65 +166,6 @@
         const clickZonesRoot = document.getElementById('clickZonesRoot');
         const videoContainersRoot = document.getElementById('videoContainersRoot');
 
-        // Make an element draggable (pointer + touch)
-        function makeZoneDraggable(zone) {
-            let startX = 0, startY = 0, originLeft = 0, originTop = 0;
-            let dragging = false, moved = false;
-
-            const onPointerDown = (e) => {
-                e.preventDefault();
-                const p = getPointFromEvent(e);
-                startX = p.x;
-                startY = p.y;
-                const rect = zone.getBoundingClientRect();
-                originLeft = rect.left;
-                originTop = rect.top;
-                dragging = true;
-                moved = false;
-                zone.classList.add('dragging');
-                zone.setPointerCapture && zone.setPointerCapture(e.pointerId);
-            };
-
-            const onPointerMove = (e) => {
-                if (!dragging) return;
-                const p = getPointFromEvent(e);
-                const dx = p.x - startX;
-                const dy = p.y - startY;
-                if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-                const newLeft = Math.max(0, originLeft + dx);
-                const newTop = Math.max(0, originTop + dy);
-                zone.style.left = newLeft + 'px';
-                zone.style.top = newTop + 'px';
-            };
-
-            const onPointerUp = (e) => {
-                if (!dragging) return;
-                dragging = false;
-                zone.classList.remove('dragging');
-                try { zone.releasePointerCapture && zone.releasePointerCapture(e.pointerId); } catch (err){}
-                // if not moved (a real click), trigger opening
-                if (!moved) {
-                    const idx = parseInt(zone.dataset.index, 10);
-                    if (!Number.isNaN(idx)) showVideo(idx);
-                }
-            };
-
-            function getPointFromEvent(e) {
-                if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-                return { x: e.clientX, y: e.clientY };
-            }
-
-            // Pointer events (preferred)
-            zone.addEventListener('pointerdown', onPointerDown);
-            window.addEventListener('pointermove', onPointerMove);
-            window.addEventListener('pointerup', onPointerUp);
-
-            // Touch fallback (if pointer not supported)
-            zone.addEventListener('touchstart', onPointerDown, {passive:false});
-            window.addEventListener('touchmove', onPointerMove, {passive:false});
-            window.addEventListener('touchend', onPointerUp);
-        }
-
         function createVideoContainer(index, topPx, leftPx) {
             const vc = document.createElement('div');
             vc.className = 'video-container';
@@ -250,25 +189,42 @@
             video.playsInline = true;
             video.setAttribute('playsinline', '');
 
-            // Use direct video.src with encodeURI to avoid issues with spaces/parentheses/commas
+            // create source element (encoded)
             const encoded = encodeURI(videoFiles[index]);
-            video.src = encoded;
+            const srcEl = document.createElement('source');
+            srcEl.src = encoded;
+            srcEl.type = 'video/mp4';
+            video.appendChild(srcEl);
 
-            // small overlay for errors
+            // small overlay for errors/details
             const err = document.createElement('div');
             err.className = 'video-error';
             err.textContent = 'Impossible de charger la vidéo (vérifiez le chemin / nom du fichier).';
             vc.appendChild(err);
 
-            // show error overlay if video fails to load
-            video.addEventListener('error', () => {
+            // video error handling
+            video.addEventListener('error', (ev) => {
                 err.classList.add('visible');
-                console.warn('erreur chargement vidéo:', encoded);
+                const code = video.error ? video.error.code : 'unknown';
+                console.warn(`Erreur lecture vidéo index=${index} src=${encoded} code=${code}`, ev);
+                // attempt a HEAD request for more info (ignore CORS/other failures)
+                fetch(encoded, { method: 'HEAD' }).then(response => {
+                    if (!response.ok) {
+                        console.warn(`HEAD ${encoded} -> status ${response.status}`);
+                        err.textContent = `Erreur ${response.status}: le fichier n'a pas été trouvé ou inaccessible (${encoded}).`;
+                    } else {
+                        console.warn(`HEAD ${encoded} -> ok`);
+                        err.textContent = `La vidéo existe mais ne peut pas être lue par le navigateur (format/CORS/autoplay).`;
+                    }
+                }).catch((fetchErr) => {
+                    console.warn('HEAD fetch failed (CORS/Network) for', encoded, fetchErr);
+                    // message already set; don't overwrite with technical error
+                });
             });
 
-            // hide error when metadata loaded successfully
             video.addEventListener('loadedmetadata', () => {
                 err.classList.remove('visible');
+                console.info(`loadedmetadata index=${index} src=${encoded}`);
             });
 
             vc.appendChild(video);
@@ -288,16 +244,17 @@
             let startIndex = 0;
 
             if (preexisting) {
+                // use its actual position as base for the diagonal
                 const rect = preexisting.getBoundingClientRect();
                 baseTop = rect.top;
                 baseLeft = rect.left;
 
+                // ensure it's index 0
                 preexisting.dataset.index = 0;
                 preexisting.textContent = '1';
                 preexisting.title = `Ouvrir la vidéo 1`;
                 preexisting.addEventListener('click', () => showVideo(0));
-                makeZoneDraggable(preexisting);
-                // create video container for index 0
+                // create container for index 0 near that zone
                 createVideoContainer(0, baseTop, baseLeft + containerOffsetX);
                 startIndex = 1;
             } else {
@@ -306,7 +263,8 @@
                 startIndex = 0;
             }
 
-            // create remaining zones; each zone is placed diagonally (down-right)
+            // Always create exactly videoFiles.length zones (0..n-1).
+            // If preexisting was present, we skip creating index 0 zone to avoid duplicate.
             for (let index = startIndex; index < videoFiles.length; index++) {
                 const top = baseTop + index * verticalStep;
                 const left = baseLeft + index * horizontalStep;
@@ -320,10 +278,12 @@
                 zone.textContent = index + 1;
                 zone.addEventListener('click', () => showVideo(index));
                 clickZonesRoot.appendChild(zone);
-                makeZoneDraggable(zone);
 
                 createVideoContainer(index, top, left + containerOffsetX);
             }
+
+            // DEBUG: log how many zones/containers were created
+            console.info(`createUI: zones=${document.querySelectorAll('.clickable-zone').length}, containers=${document.querySelectorAll('.video-container').length}`);
         }
 
         function showVideo(index) {
@@ -347,16 +307,29 @@
             const toggleActive = document.getElementById('toggle')?.classList.contains('active');
             video.muted = !toggleActive;
 
-            // try to (re)load and play the video
-            // reload source in case the path was unavailable initially
-            const encoded = encodeURI(videoFiles[index]);
-            if (video.src !== encoded) video.src = encoded;
-            video.load();
+            // try to (re)load the source and play
+            const sourceEl = video.querySelector('source');
+            if (sourceEl) {
+                const encoded = sourceEl.src || encodeURI(videoFiles[index]);
+                sourceEl.src = encoded;
+                try {
+                    // try HEAD to detect missing file early (may fail due to CORS)
+                    fetch(encoded, { method: 'HEAD' }).then(resp => {
+                        if (!resp.ok) {
+                            console.warn(`HEAD check failed for ${encoded}: ${resp.status}`);
+                        }
+                    }).catch(() => {/* ignore network/CORS */});
+                } catch (e) { /* ignore */ }
 
-            // play if allowed; user click (or drag-less click) is a gesture so should allow
+                video.load();
+            } else {
+                // fallback: set video.src directly
+                video.src = encodeURI(videoFiles[index]);
+                video.load();
+            }
+
             video.play().catch(err => {
-                // autoplay policy might prevent play; user can press play manually
-                console.warn('play() failed:', err);
+                console.warn('play() failed (user gesture/autoplay policy):', err);
             });
         }
 
