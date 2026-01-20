@@ -1,893 +1,250 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>www.mediamanif.org</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('chicity.png');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-        .clickable-zone {
-            position: fixed;
-            top: 20px;
-            left: 30%;
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone:hover {
-            background-color: transparent;
-        }
-        .clickable-zone2 {
-            position: fixed;
-            top: 30px;
-            left: 30%;
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone2:hover {
-            background-color: transparent;
-        }
-        .clickable-zone3 {
-            position: fixed;
-            top: 40px;  /* wazai ajuste la position verticale */
-            left: 30%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone3:hover {
-            background-color: transparent;
-        }
-        .clickable-zone4 {
-            position: fixed;
-            top: 20px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone4:hover {
-            background-color: transparent;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>www.mediamanif.org</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('chicity.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
-        .clickable-zone5 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone5:hover {
-            background-color: transparent;
-        }
-        .clickable-zone6 {
-            position: fixed;
-            top: 40px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone6:hover {
-            background-color: transparent;
 
+        /* shared clickable zone style; position will be set inline for each */
+        .clickable-zone {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 20;
         }
-        .clickable-zone7 {
-            position: fixed;
-            top: 20px;  /* wazai ajuste la position verticale */
-            left: 130%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone7:hover {
-            background-color: transparent;
-        }
-        .clickable-zone8 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 130%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone8:hover {
-            background-color: transparent;
-}
-        .clickable-zone9 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone9:hover {
-            background-color: transparent;
-}
-        .clickable-zone10 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone10:hover {
-            background-color: transparent;
-        }
-        .clickable-zone11 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone11:hover {
-            background-color: transparent;
-        }
-        .clickable-zone12 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone12:hover {
-            background-color: transparent;
-        }
-        .clickable-zone13 {
-            position: fixed;
-            top: 30px;  /* wazai ajuste la position verticale */
-            left: 80%;   /* ajuste la position horizontale */
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .clickable-zone13:hover {
-            background-color: transparent;
-        }
-        .video-container {
-            display: none;
-            position: fixed;
-            top: 10px;
-            left: 30px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container2 {
-            display: none;
-            position: fixed;
-            top: 240px;
-            left: 30px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        /* modifie la position top */
-        .video-container3 {
-            display: none;
-            position: fixed;
-            top: 470px;  /* Ajuste la position verticale */
-            left: 30px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container4 {
-            display: none;
-            position: fixed;
-            top: 10px;
-            left: 130px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container5 {
-            display: none;
-            position: fixed;
-            top: 240px;
-            left: 130px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container6 {
-            display: none;
-            position: fixed;
-            top: 470px;
-            left: 130px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container7 {
-            display: none;
-            position: fixed;
-            top: 10px;
-            left: 230px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container8 {
-            display: none;
-            position: fixed;
-            top: 240px;
-            left: 230px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container9 {
-            display: none;
-            position: fixed;
-            top: 470px;
-            left: 230px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container10 {
-            display: none;
-            position: fixed;
-            top: 10px;
-            left: 330px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container11 {
-            display: none;
-            position: fixed;
-            top: 240px;
-            left: 330px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container12 {
-            display: none;
-            position: fixed;
-            top: 470px;
-            left: 330px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container13 {
-            display: none;
-            position: fixed;
-            top: 500px;
-            left: 330px;
-            width: 320px;
-            background-color: #000;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .video-container.active {
-            display: block;
-        }
-        .video-container2.active {
-            display: block;
-        }
-        .video-container3.active {
-            display: block;
-        }
-        .video-container4.active {
-            display: block;
-        }
-        .video-container5.active {
-            display: block;
-        }
-        .video-container6.active {
-            display: block;
-        }
-        .video-container7.active {
-            display: block;
-        }
-        .video-container8.active {
-            display: block;
-        }
-        .video-container9.active {
-            display: block;
-        }
-        .video-container10.active {
-            display: block;
-        }
-        .video-container11.active {
-            display: block;
-        }
-        .video-container12.active {
-            display: block;
-        }
-        .video-container13.active {
-            display: block;
-        }
-        .video-container video {
-            width: 100%;
-            display: block;
-        }
-        .video-container2 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container3 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container4 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container5 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container6 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container7 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container8 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container9 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container10 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container11 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container12 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container13 video {
-            width: 100%;
-            display: block;
-        }
-        .video-container video::-webkit-media-controls-mute-button{
-        .video-container2 video::-webkit-media-controls-mute-button{
-        .video-container3 video::-webkit-media-controls-mute-button {
-        .video-container4 video::-webkit-media-controls-mute-button {
-        .video-container5 video::-webkit-media-controls-mute-button {
-        .video-container6 video::-webkit-media-controls-mute-button {
-        .video-container7 video::-webkit-media-controls-mute-button {
-        .video-container8 video::-webkit-media-controls-mute-button {
-        .video-container9 video::-webkit-media-controls-mute-button {
-        .video-container10 video::-webkit-media-controls-mute-button {
-        .video-container11 video::-webkit-media-controls-mute-button {
-        .video-container12 video::-webkit-media-controls-mute-button {
-        .video-container13 video::-webkit-media-controls-mute-button {
+        .clickable-zone:hover { background-color: rgba(255,255,255,0.03); }
 
-            display: none;
-        }
-        .video-container video::-webkit-media-controls-volume-slider,
-        .video-container2 video::-webkit-media-controls-volume-slider,
-        .video-container3 video::-webkit-media-controls-volume-slider,
-        .video-container4 video::-webkit-media-controls-volume-slider,
-        .video-container5 video::-webkit-media-controls-volume-slider,
-        .video-container6 video::-webkit-media-controls-volume-slider,
-        .video-container7 video::-webkit-media-controls-volume-slider,
-        .video-container8 video::-webkit-media-controls-volume-slider,
-        .video-container9 video::-webkit-media-controls-volume-slider,
-        .video-container10 video::-webkit-media-controls-volume-slider,
-        .video-container11 video::-webkit-media-controls-volume-slider,
-        .video-container12 video::-webkit-media-controls-volume-slider,
-        .video-container13 video::-webkit-media-controls-volume-slider,
- 
-            display: none;
-        }
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 25px;
-            height: 25px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 25px;
-            text-align: center;
-            z-index: 10;
-        }
-        .close-btn:hover {
-            background-color: #fff;
-        }
-        .toggle-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #ccc;
-            border-radius: 34px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .toggle-switch.active {
-            background-color: #000000;
-        }
-        .toggle-slider {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(26px);
-        }
-    </style>
+        /* shared video container */
+        .video-container {
+            display: none;
+            position: fixed;
+            left: 30px;
+            width: 320px;
+            background-color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            z-index: 30;
+        }
+        .video-container.active { display: block; }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 25px;
+            text-align: center;
+            z-index: 40;
+        }
+        .close-btn:hover { background-color: #fff; }
+
+        .toggle-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 50;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-switch.active { background-color: #000000; }
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active .toggle-slider { transform: translateX(26px); }
+
+        /* small screens: scale down margins */
+        @media (max-width: 600px) {
+            .video-container { width: 280px; left: 12px; }
+            .clickable-zone { width: 44px; height: 44px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="clickable-zone" onclick="showVideo()"></div>
-    <div class="clickable-zone2" onclick="showVideo2()"></div>
-    <!-- zone cliquable video 3 - modifier la fonction onclick if needed -->
-    <div class="clickable-zone3" onclick="showVideo3()"></div>
-    <div class="clickable-zone4" onclick="showVideo4()"></div>
-    <div class="clickable-zone5" onclick="showVideo5()"></div>
-    <div class="clickable-zone6" onclick="showVideo6()"></div>
-    <div class="clickable-zone7" onclick="showVideo7()"></div>
-    <div class="clickable-zone8" onclick="showVideo8()"></div>
-    <div class="clickable-zone9" onclick="showVideo9()"></div>
-    <div class="clickable-zone10" onclick="showVideo10()"></div>
-    <div class="clickable-zone11" onclick="showVideo11()"></div>
-    <div class="clickable-zone12" onclick="showVideo12()"></div>
-    <div class="clickable-zone13" onclick="showVideo13()"></div>
+    <!-- click zones and video containers will be generated by JS -->
+    <div id="clickZonesRoot"></div>
+    <div id="videoContainersRoot"></div>
 
-    <div class="video-container" id="videoContainer">
-        <button class="close-btn" onclick="closeVideo()">×</button>
-        <video id="videoPlayer" controls muted>
-            <source src="CAM\_20260114085243\_0003\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
- 
-    <div class="video-container2" id="videoContainer2">
-        <button class="close-btn" onclick="closeVideo2()">×</button>
-        <video id="videoPlayer2" controls muted>
-            <source src="CAM\_20260114085533\_0004\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
- 
-    <div class="video-container3" id="videoContainer3">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer3" controls muted>
-            <source src="CAM\_20260114090317\_0006\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+    <div class="toggle-container">
+        <div class="toggle-switch" id="toggle" onclick="toggleSwitch()">
+            <div class="toggle-slider"></div>
+        </div>
+    </div>
 
-<div class="video-container4" id="videoContainer4">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer4" controls muted>
-            <source src="CAM\_20260114091848\_0009\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+    <script>
+        /*
+         * Les 13 vidéos (dans l'ordre fourni) — placées dans le dossier "projetmanif/".
+         * Si les fichiers sont ailleurs, ajustez le chemin.
+         */
+        const videoFiles = [
+            'projetmanif/CAM_20260114085243_0003_D.mp4',
+            'projetmanif/CAM_20260114085533_0004_D.mp4',
+            'projetmanif/CAM_20260114090317_0006_D.mp4',
+            'projetmanif/CAM_20260114091848_0009_D.mp4',
+            'projetmanif/CAM_20260114092103_0010_D (1).mp4',
+            'projetmanif/CAM_20260114092103_0010_D (7).mp4',
+            'projetmanif/CAM_20260114093921_0014_D.mp4',
+            'projetmanif/CAM_20260114094456_0015_D.mp4',
+            'projetmanif/CAM_20260114095021_0016_D.mp4',
+            'projetmanif/CAM_20260114095352_0017_D.mp4',
+            'projetmanif/CAM_20260114095731_0018_D.mp4',
+            'projetmanif/CAM_20260114100025_0019_D.mp4',
+            'projetmanif/f,efnfn.mp4'
+        ];
 
-<div class="video-container5" id="videoContainer5">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer5" controls muted>
-            <source src="CAM\_20260114092103\_0010\_D (1).mp4" type="video/mp4">
- 
-        </video>
-    </div>
+        const clickZonesRoot = document.getElementById('clickZonesRoot');
+        const videoContainersRoot = document.getElementById('videoContainersRoot');
 
-<div class="video-container6" id="videoContainer6">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer6" controls muted>
-            <source src="CAM\_20260114092103\_0010\_D (7).mp4" type="video/mp4">
- 
-        </video>
-    </div>
+        function createUI() {
+            const baseTop = 20;           // top start position in px
+            const verticalSpacing = 60;   // space between clickable zones (px)
+            const containerLeft = 30;     // left position for video containers (px)
+            const containerTopStart = 20; // first video container top (px)
 
-<div class="video-container7" id="videoContainer7">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer7" controls muted>
-            <source src="CAM\_20260114093921\_0014\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+            videoFiles.forEach((file, index) => {
+                const i = index + 1;
 
-<div class="video-container8" id="videoContainer8">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer8" controls muted>
-            <source src="CAM_20260114094456_0015_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+                // clickable zone
+                const zone = document.createElement('div');
+                zone.className = 'clickable-zone';
+                // position zones vertically so they don't overlap
+                zone.style.top = (baseTop + index * verticalSpacing) + 'px';
+                // adjust left so zones are near the same place as original (use percentage)
+                zone.style.left = '30%';
+                zone.title = `Ouvrir la vidéo ${i}`;
+                zone.dataset.index = index;
+                zone.addEventListener('click', () => showVideo(index));
+                clickZonesRoot.appendChild(zone);
 
-<div class="video-container9" id="videoContainer9">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer9" controls muted>
-            <source src="CAM\_20260114095021\_0016\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+                // video container
+                const vc = document.createElement('div');
+                vc.className = 'video-container';
+                vc.id = `videoContainer-${index}`;
+                // place containers stacked downwards to avoid overlapping the same spot
+                vc.style.top = (containerTopStart + index * (containerLeft + 40)) + 'px';
+                vc.style.left = containerLeft + 'px';
 
-<div class="video-container10" id="videoContainer10">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer10" controls muted>
-            <source src="CAM\_20260114095352\_0017\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+                // close button
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-btn';
+                closeBtn.innerHTML = '×';
+                closeBtn.addEventListener('click', () => closeVideo(index));
+                vc.appendChild(closeBtn);
 
-<div class="video-container11" id="videoContainer11">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer11" controls muted>
-            <source src="CAM\_20260114095731\_0018\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+                // video element
+                const video = document.createElement('video');
+                video.id = `videoPlayer-${index}`;
+                video.controls = true;
+                video.muted = true;
+                video.preload = 'metadata';
 
-<div class="video-container12" id="videoContainer12">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer12" controls muted>
-            <source src="CAM\_20260114100025\_0019\_D.mp4" type="video/mp4">
- 
-        </video>
-    </div>
+                const src = document.createElement('source');
+                src.src = file;
+                src.type = 'video/mp4';
 
-<div class="video-container13" id="videoContainer13">
-        <button class="close-btn" onclick="closeVideo3()">×</button>
-        <video id="videoPlayer13" controls muted>
-            <source src="f,efnfn.mp4" type="video/mp4">
- 
-        </video>
-    </div>
- 
-    <div class="toggle-container">
-        <div class="toggle-switch" id="toggle" onclick="toggleSwitch()">
-            <div class="toggle-slider"></div>
-        </div>
-    </div>
- 
-    <header>
- 
-    </header>
+                video.appendChild(src);
+                vc.appendChild(video);
 
-    <main>
- 
-
-    </main>
-
-
-
-    <footer>
- 
-    </footer>
-
-    <script>
-        function showVideo() {
-            const container = document.getElementById('videoContainer');
-            const video = document.getElementById('videoPlayer');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo() {
-            const container = document.getElementById('videoContainer');
-            const video = document.getElementById('videoPlayer');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo2() {
-            const container = document.getElementById('videoContainer2');
-            const video = document.getElementById('videoPlayer2');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo2() {
-            const container = document.getElementById('videoContainer2');
-            const video = document.getElementById('videoPlayer2');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        // la Fonction  pour la vidéo 3
-        function showVideo3() {
-            const container = document.getElementById('videoContainer3');
-            const video = document.getElementById('videoPlayer3');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo3() {
-            const container = document.getElementById('videoContainer3');
-            const video = document.getElementById('videoPlayer3');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
+                videoContainersRoot.appendChild(vc);
+            });
         }
- 
-        function showVideo4() {
-            const container = document.getElementById('videoContainer4');
-            const video = document.getElementById('videoPlayer4');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo4() {
-            const container = document.getElementById('videoContainer4');
-            const video = document.getElementById('videoPlayer4');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo5() {
-            const container = document.getElementById('videoContainer5');
-            const video = document.getElementById('videoPlayer5');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo5() {
-            const container = document.getElementById('videoContainer5');
-            const video = document.getElementById('videoPlayer5');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo6() {
-            const container = document.getElementById('videoContainer6');
-            const video = document.getElementById('videoPlayer6');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo6() {
-            const container = document.getElementById('videoContainer6');
-            const video = document.getElementById('videoPlayer6');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo7() {
-            const container = document.getElementById('videoContainer7');
-            const video = document.getElementById('videoPlayer7');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo7() {
-            const container = document.getElementById('videoContainer7');
-            const video = document.getElementById('videoPlayer7');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
-         
-        function showVideo8() {
-            const container = document.getElementById('videoContainer8');
-            const video = document.getElementById('videoPlayer8');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo8() {
-            const container = document.getElementById('videoContainer8');
-            const video = document.getElementById('videoPlayer8');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo9() {
-            const container = document.getElementById('videoContainer9');
-            const video = document.getElementById('videoPlayer9');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo9() {
-            const container = document.getElementById('videoContainer9');
-            const video = document.getElementById('videoPlayer9');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo10() {
-            const container = document.getElementById('videoContainer10');
-            const video = document.getElementById('videoPlayer10');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo10() {
-            const container = document.getElementById('videoContainer10');
-            const video = document.getElementById('videoPlayer10');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo11() {
-            const container = document.getElementById('videoContainer11');
-            const video = document.getElementById('videoPlayer11');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo11() {
-            const container = document.getElementById('videoContainer11');
-            const video = document.getElementById('videoPlayer11');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo12() {
-            const container = document.getElementById('videoContainer12');
-            const video = document.getElementById('videoPlayer12');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo12() {
-            const container = document.getElementById('videoContainer12');
-            const video = document.getElementById('videoPlayer12');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }
- 
-        function showVideo13() {
-            const container = document.getElementById('videoContainer13');
-            const video = document.getElementById('videoPlayer13');
-            video.muted = true;
-            container.classList.add('active');
-            video.play();
-        }
- 
-        function closeVideo13() {
-            const container = document.getElementById('videoContainer13');
-            const video = document.getElementById('videoPlayer13');
-            container.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
 
-        }
- 
-        function toggleSwitch() {
-            const toggle = document.getElementById('toggle');
-            toggle.classList.toggle('active');
-        }
-    </script>
+        function showVideo(index) {
+            const container = document.getElementById(`videoContainer-${index}`);
+            const video = document.getElementById(`videoPlayer-${index}`);
+            if (!container || !video) return;
+            // pause any other playing videos
+            document.querySelectorAll('.video-container.active video').forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+                v.closest('.video-container').classList.remove('active');
+            });
+            container.classList.add('active');
+            video.muted = true;
+            // attempt to play; some browsers require user gesture (click is a gesture) so it's OK
+            video.play().catch(err => {
+                // ignore play errors (autoplay policies), user can press play manually
+                console.warn('play() failed:', err);
+            });
+        }
+
+        function closeVideo(index) {
+            const container = document.getElementById(`videoContainer-${index}`);
+            const video = document.getElementById(`videoPlayer-${index}`);
+            if (!container || !video) return;
+            container.classList.remove('active');
+            try {
+                video.pause();
+                video.currentTime = 0;
+            } catch (e) { /* ignore */ }
+        }
+
+        function toggleSwitch() {
+            const toggle = document.getElementById('toggle');
+            toggle.classList.toggle('active');
+
+            // example behaviour: when active -> unmute all visible videos; when inactive -> mute them
+            const shouldUnmute = toggle.classList.contains('active');
+            document.querySelectorAll('.video-container video').forEach(video => {
+                video.muted = !shouldUnmute;
+            });
+        }
+
+        // initialize UI
+        createUI();
+
+        // Accessibility: close opened video when Escape is pressed
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.video-container.active').forEach(vc => {
+                    const idx = vc.id.split('-')[1];
+                    closeVideo(idx);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
