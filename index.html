@@ -196,15 +196,47 @@ function showVideo(index, zone) {
         document.body.appendChild(vc);
     }
 
+    // Ferme les autres vidéos
     document.querySelectorAll('.video-container')
         .forEach(v => v.classList.remove('active'));
 
-    const r = zone.getBoundingClientRect();
-    vc.style.top = r.bottom + 10 + 'px';
-    vc.style.left = r.left + 'px';
-
     vc.classList.add('active');
+
+    // Dimensions écran
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // Dimensions vidéo
+    const vcRect = vc.getBoundingClientRect();
+
+    // Position du point cliqué
+    const r = zone.getBoundingClientRect();
+
+    let top  = r.bottom + 10; // par défaut en bas
+    let left = r.left;        // par défaut à gauche
+
+    /* === AJUSTEMENTS VERTICAUX === */
+    if (top + vcRect.height > vh) {
+        // si ça dépasse en bas → placer au-dessus du point
+        top = r.top - vcRect.height - 10;
+    }
+
+    // sécurité si encore trop haut
+    if (top < 10) top = 10;
+
+    /* === AJUSTEMENTS HORIZONTAUX === */
+    if (left + vcRect.width > vw) {
+        // si ça dépasse à droite → aligner à droite du point
+        left = r.right - vcRect.width;
+    }
+
+    // sécurité si trop à gauche
+    if (left < 10) left = 10;
+
+    vc.style.top  = `${top}px`;
+    vc.style.left = `${left}px`;
 }
+
 
 function closeVideo(index) {
     document.getElementById('video-' + index)?.classList.remove('active');
@@ -280,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
