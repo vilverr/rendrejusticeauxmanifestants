@@ -215,5 +215,30 @@ function toggleSwitch() {
 }
 </script>
 
+    <script>
+/* === DEBUG POSITION ICONES (F12) === */
+document.querySelectorAll('.clickable-zone').forEach(zone => {
+    zone.addEventListener('click', () => {
+        const map = document.getElementById('map-container');
+        const mapRect = map.getBoundingClientRect();
+        const zoneRect = zone.getBoundingClientRect();
+
+        const pxTop = zoneRect.top - mapRect.top;
+        const pxLeft = zoneRect.left - mapRect.left;
+
+        const percentTop = (pxTop / mapRect.height * 100).toFixed(2);
+        const percentLeft = (pxLeft / mapRect.width * 100).toFixed(2);
+
+        console.log('==============================');
+        console.log(`ZONE ${zone.dataset.index}`);
+        console.log(`TOP  : ${pxTop.toFixed(1)}px  | ${percentTop}%`);
+        console.log(`LEFT : ${pxLeft.toFixed(1)}px | ${percentLeft}%`);
+        console.log(`HTML : data-top="${pxTop.toFixed(1)}px" data-left="${percentLeft}%"`);
+        console.log('==============================');
+    });
+});
+</script>
+
 </body>
 </html>
+
