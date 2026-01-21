@@ -128,12 +128,27 @@
     </style>
 </head>
 <body>
-    <!-- Si tu as déjà placé manuellement la première zone clickable,
-         mets-la dans #clickZonesRoot et ajoute data-base="true" ou laisse la première .clickable-zone.
-         Exemple :
-         <div class="clickable-zone" data-base="true" style="top:120px;left:40px;">1</div>
+    <!--
+      Template de zones cliquables sans valeurs fixes.
+      Pour chaque zone : remplis data-top et data-left (nombre en px ou valeur CSS "120px"/"10%"/etc.)
+      Si tu laisses data-top/data-left vides, le script createUI calculera la position automatiquement.
+      IMPORTANT : data-index doit correspondre à l'index dans videoFiles (0 = première vidéo).
     -->
-    <div id="clickZonesRoot"></div>
+    <div id="clickZonesRoot">
+      <div class="clickable-zone" data-index="0" data-top="150" data-left="270">1</div>
+      <div class="clickable-zone" data-index="1" data-top="" data-left="">2</div>
+      <div class="clickable-zone" data-index="2" data-top="" data-left="">3</div>
+      <div class="clickable-zone" data-index="3" data-top="" data-left="">4</div>
+      <div class="clickable-zone" data-index="4" data-top="" data-left="">5</div>
+      <div class="clickable-zone" data-index="5" data-top="" data-left="">6</div>
+      <div class="clickable-zone" data-index="6" data-top="" data-left="">7</div>
+      <div class="clickable-zone" data-index="7" data-top="" data-left="">8</div>
+      <div class="clickable-zone" data-index="8" data-top="" data-left="">9</div>
+      <div class="clickable-zone" data-index="9" data-top="" data-left="">10</div>
+      <div class="clickable-zone" data-index="10" data-top="" data-left="">11</div>
+      <div class="clickable-zone" data-index="11" data-top="" data-left="">12</div>
+    </div>
+
     <div id="videoContainersRoot"></div>
 
     <div class="toggle-container">
@@ -165,13 +180,29 @@
         const clickZonesRoot = document.getElementById('clickZonesRoot');
         const videoContainersRoot = document.getElementById('videoContainersRoot');
 
+        // Small helper: apply data-top/data-left attributes (if present) as inline styles.
+        // Accepts a number (ex: "120") or a CSS value (ex: "120px" or "10%").
+        (function applyZoneAttributes() {
+          if (!clickZonesRoot) return;
+          Array.from(clickZonesRoot.querySelectorAll('.clickable-zone')).forEach(zone => {
+            const topAttr = zone.getAttribute('data-top');
+            const leftAttr = zone.getAttribute('data-left');
+            if (topAttr !== null && topAttr.trim() !== '') {
+              const t = topAttr.trim();
+              zone.style.top = (/px|%|vh|vw$/i.test(t) ? t : (isNaN(Number(t)) ? t : (Number(t) + 'px')));
+            }
+            if (leftAttr !== null && leftAttr.trim() !== '') {
+              const l = leftAttr.trim();
+              zone.style.left = (/px|%|vh|vw$/i.test(l) ? l : (isNaN(Number(l)) ? l : (Number(l) + 'px')));
+            }
+          });
+        })();
+
         // resolve URL and let the browser normalize/encode it
         function resolveUrl(path) {
-            // new URL handles absolute and relative paths and encodes characters as needed
             try {
                 return new URL(path, window.location.href).href;
             } catch (e) {
-                // fallback: minimal encoding
                 return encodeURI(path);
             }
         }
@@ -197,25 +228,20 @@
             video.playsInline = true;
             video.setAttribute('playsinline', '');
 
-            // create source element with properly resolved URL
             const source = document.createElement('source');
             source.src = resolveUrl(videoFiles[index]);
             source.type = 'video/mp4';
             video.appendChild(source);
 
-            // overlay to show errors / messages
             const err = document.createElement('div');
             err.className = 'video-error';
             err.textContent = 'Impossible de charger la vidéo (vérifiez le chemin / nom du fichier).';
             vc.appendChild(err);
 
-            // error handling
             video.addEventListener('error', (ev) => {
                 err.classList.add('visible');
                 const code = video.error ? video.error.code : 'unknown';
                 console.warn(`Erreur lecture vidéo index=${index} src=${source.src} code=${code}`, ev);
-
-                // try a HEAD request to get status (can fail due to CORS, ignore errors)
                 fetch(source.src, { method: 'HEAD' }).then(response => {
                     if (!response.ok) {
                         console.warn(`HEAD ${source.src} -> status ${response.status}`);
@@ -226,7 +252,6 @@
                     }
                 }).catch(fetchErr => {
                     console.warn('HEAD fetch failed (CORS/Network) for', source.src, fetchErr);
-                    // leave the generic message
                 });
             });
 
@@ -252,11 +277,9 @@
             let haveBaseElement = false;
 
             if (baseEl) {
-                // try to use inline style top/left if present, else getBoundingClientRect
                 const styleTop = baseEl.style.top;
                 const styleLeft = baseEl.style.left;
                 if (styleTop && styleLeft) {
-                    // parse px values
                     const t = parseFloat(styleTop);
                     const l = parseFloat(styleLeft);
                     if (!isNaN(t) && !isNaN(l)) {
@@ -275,29 +298,40 @@
                 haveBaseElement = true;
             }
 
-            // Create exactly videoFiles.length zones and containers.
-            // If there was a base element, use it as index 0 (do not duplicate).
+            // Create exactly videoFiles.length containers.
+            // For clickable zones: if a zone with the correct data-index already exists in the HTML, reuse it (do not duplicate).
             for (let index = 0; index < videoFiles.length; index++) {
-                const top = baseTop + index * verticalStep;
-                const left = baseLeft + index * horizontalStep;
+                let top, left;
 
-                if (index === 0 && haveBaseElement) {
-                    // reuse baseEl as zone 0
-                    const zone = baseEl;
-                    zone.dataset.index = 0;
-                    zone.title = `Ouvrir la vidéo 1`;
-                    zone.textContent = '1';
-                    // ensure it has inline top/left to stay put
-                    zone.style.top = top + 'px';
-                    zone.style.left = left + 'px';
-                    // remove previous listeners to avoid duplicates
-                    zone.replaceWith(zone.cloneNode(true));
-                    const newZone = clickZonesRoot.querySelector('.clickable-zone[data-index="0"]') || clickZonesRoot.querySelector('.clickable-zone');
-                    if (newZone) {
-                        newZone.addEventListener('click', () => showVideo(0));
+                // If a manual zone exists for this index, read its current inline position (so manual HTML placement is respected).
+                const existingZone = clickZonesRoot.querySelector(`.clickable-zone[data-index="${index}"]`);
+                if (existingZone) {
+                    // prefer the inline style top/left if present, otherwise fallback to base positioning
+                    const sTop = existingZone.style.top;
+                    const sLeft = existingZone.style.left;
+                    if (sTop && sLeft) {
+                        top = parseFloat(sTop);
+                        left = parseFloat(sLeft);
+                    } else {
+                        top = baseTop + index * verticalStep;
+                        left = baseLeft + index * horizontalStep;
+                        existingZone.style.top = top + 'px';
+                        existingZone.style.left = left + 'px';
                     }
+
+                    // ensure title/text and click handler are present
+                    existingZone.title = existingZone.title || `Ouvrir la vidéo ${index + 1}`;
+                    existingZone.textContent = existingZone.textContent || (index + 1);
+                    // remove old listeners by cloning, then attach new handler to avoid duplicates
+                    const cloned = existingZone.cloneNode(true);
+                    cloned.dataset.index = String(index);
+                    cloned.addEventListener('click', () => showVideo(index));
+                    existingZone.replaceWith(cloned);
                 } else {
-                    // create a new zone
+                    // no manual zone: create it
+                    top = baseTop + index * verticalStep;
+                    left = baseLeft + index * horizontalStep;
+
                     const zone = document.createElement('div');
                     zone.className = 'clickable-zone';
                     zone.style.top = top + 'px';
@@ -309,11 +343,10 @@
                     clickZonesRoot.appendChild(zone);
                 }
 
-                // create corresponding video container
+                // create corresponding video container (always)
                 createVideoContainer(index, top, left + containerOffsetX);
             }
 
-            // debug log: verify counts
             console.info(`createUI: zones=${document.querySelectorAll('.clickable-zone').length}, containers=${document.querySelectorAll('.video-container').length}`);
         }
 
@@ -337,11 +370,9 @@
 
             container.classList.add('active');
 
-            // toggle behaviour: if toggle active -> unmute, else mute
             const toggleActive = document.getElementById('toggle')?.classList.contains('active');
             video.muted = !toggleActive;
 
-            // ensure source is set (in case browser discarded it)
             const sourceEl = video.querySelector('source');
             const resolved = resolveUrl(videoFiles[index]);
             if (sourceEl) {
@@ -352,7 +383,6 @@
                 try { video.load(); } catch (e) { console.warn('video.load() failed', e); }
             }
 
-            // attempt to play; may fail due to autoplay policies but controls are available
             video.play().catch(err => {
                 console.warn('play() failed (user gesture/autoplay):', err);
             });
