@@ -114,7 +114,7 @@ html, body {
     transform: translateX(26px);
 }
 
-/* === la vidéo === */
+/* === la vidéo fullscreen === */
 .fullscreen-video {
     display: none;
     position: fixed;
@@ -173,13 +173,12 @@ html, body {
     <div class="clickable-zone" data-index="12" data-top="660px" data-left="78%">13</div>
 </div>
 
-<!-- === TOGGLE === -->
+<!-- === TOGGLE fullscreen === -->
 <div class="toggle-container">
     <div class="toggle-switch" id="toggle" onclick="toggleSwitch()">
         <div class="toggle-slider"></div>
     </div>
 </div>
-
 
 <div class="fullscreen-video" id="fullscreenVideo">
     <button class="close-btn" onclick="closeFullscreenVideo()">×</button>
@@ -189,7 +188,6 @@ html, body {
 </div>
 
 <script>
-
 const BASE = 'https://vilverr.github.io/projetmanif/';
 const videoFiles = [
     BASE + 'CAM_20260114085243_0003_D.mp4',
@@ -207,7 +205,6 @@ const videoFiles = [
     BASE + 'fefnfn.mp4',
 ];
 
-
 document.querySelectorAll('.clickable-zone').forEach(zone => {
     zone.style.top = zone.dataset.top;
     zone.style.left = zone.dataset.left;
@@ -218,7 +215,6 @@ document.querySelectorAll('.clickable-zone').forEach(zone => {
     });
 });
 
-
 function showVideo(index, zone) {
     let vc = document.getElementById('video-' + index);
 
@@ -228,11 +224,26 @@ function showVideo(index, zone) {
         vc.id = 'video-' + index;
         vc.innerHTML = `
             <button class="close-btn" onclick="closeVideo(${index})">×</button>
-            <video controls autoplay muted playsinline>
+            <video autoplay playsinline>
                 <source src="${videoFiles[index]}" type="video/mp4">
             </video>
         `;
         document.body.appendChild(vc);
+
+        const videoEl = vc.querySelector('video');
+
+        // Force muet et volume à 0
+        videoEl.muted = true;
+        videoEl.volume = 0;
+        videoEl.play();
+
+        // Empêche tout changement de volume
+        videoEl.addEventListener('volumechange', () => {
+            if (!videoEl.muted || videoEl.volume !== 0) {
+                videoEl.muted = true;
+                videoEl.volume = 0;
+            }
+        });
     }
 
     // Ferme les autres vidéos
@@ -241,47 +252,29 @@ function showVideo(index, zone) {
 
     vc.classList.add('active');
 
-    // Dimensions écran
+    // --- Positionnement ---
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-
-    // Dimensions vidéo
     const vcRect = vc.getBoundingClientRect();
-
-    // Position du point cliqué
     const r = zone.getBoundingClientRect();
 
-    let top  = r.bottom + 10; // par défaut en bas
-    let left = r.left;        // par défaut à gauche
+    let top  = r.bottom + 10;
+    let left = r.left;
 
-    /* === AJUSTEMENTS VERTICAUX === */
-    if (top + vcRect.height > vh) {
-        // si ça dépasse en bas → placer au-dessus du point
-        top = r.top - vcRect.height - 10;
-    }
-
-    // sécurité si encore trop haut
+    if (top + vcRect.height > vh) top = r.top - vcRect.height - 10;
     if (top < 10) top = 10;
-
-    /* === AJUSTEMENTS HORIZONTAUX === */
-    if (left + vcRect.width > vw) {
-        // si ça dépasse à droite → aligner à droite du point
-        left = r.right - vcRect.width;
-    }
-
-    // sécurité si trop à gauche
+    if (left + vcRect.width > vw) left = r.right - vcRect.width;
     if (left < 10) left = 10;
 
     vc.style.top  = `${top}px`;
     vc.style.left = `${left}px`;
 }
 
-
 function closeVideo(index) {
     document.getElementById('video-' + index)?.classList.remove('active');
 }
 
-/* === TOGGLE === */
+/* === TOGGLE fullscreen === */
 function toggleSwitch() {
     const toggle = document.getElementById('toggle');
     const fullscreenVideo = document.getElementById('fullscreenVideo');
@@ -311,9 +304,8 @@ function closeFullscreenVideo() {
 }
 </script>
 
-  <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-
     const container = document.getElementById('map-container');
     const img = container?.querySelector('img');
 
@@ -323,24 +315,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     img.addEventListener('click', e => {
-
         const containerRect = container.getBoundingClientRect();
         const imgRect = img.getBoundingClientRect();
 
-        // Dimensions naturelles de l'image
         const naturalRatio = img.naturalWidth / img.naturalHeight;
         const containerRatio = containerRect.width / containerRect.height;
 
         let realWidth, realHeight, offsetX, offsetY;
 
         if (containerRatio > naturalRatio) {
-            // bandes verticales (gauche / droite)
             realHeight = containerRect.height;
             realWidth = realHeight * naturalRatio;
             offsetX = (containerRect.width - realWidth) / 2;
             offsetY = 0;
         } else {
-            // bandes horizontales (haut / bas)
             realWidth = containerRect.width;
             realHeight = realWidth / naturalRatio;
             offsetX = 0;
@@ -350,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = e.clientX - containerRect.left - offsetX;
         const y = e.clientY - containerRect.top - offsetY;
 
-        // Sécurité : clic hors image réelle
         if (x < 0 || y < 0 || x > realWidth || y > realHeight) return;
 
         const percentX = (x / realWidth * 100).toFixed(3);
@@ -365,18 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `<div class="clickable-zone" data-top="${pixelY}px" data-left="${percentX}%"></div>`
         );
     });
-
 });
 </script>
 
-
-
-
-
 </body>
 </html>
-
-
-
-
-
