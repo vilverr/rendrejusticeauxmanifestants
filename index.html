@@ -217,30 +217,32 @@ function toggleSwitch() {
 </script>
 
 <script>
-/* === DEBUG CLICK MAP (F12) === */
-document.getElementById('map-container').addEventListener('click', e => {
-    const map = e.currentTarget;
-    const rect = map.getBoundingClientRect();
+const img = document.getElementById('map-image');
 
-    const pxLeft = e.clientX - rect.left;
-    const pxTop = e.clientY - rect.top;
+img.addEventListener('click', e => {
+    const imgRect = img.getBoundingClientRect();
 
-    const percentLeft = (pxLeft / rect.width * 100).toFixed(2);
-    const percentTop = (pxTop / rect.height * 100).toFixed(2);
+    const x = e.clientX - imgRect.left;
+    const y = e.clientY - imgRect.top;
+
+    const percentX = (x / imgRect.width * 100).toFixed(3);
+    const percentY = (y / imgRect.height * 100).toFixed(3);
 
     console.clear();
-    console.log('📍 CLICK SUR LA CARTE');
-    console.log(`TOP  : ${pxTop.toFixed(1)}px | ${percentTop}%`);
-    console.log(`LEFT : ${pxLeft.toFixed(1)}px | ${percentLeft}%`);
+    console.log('📍 CLICK IMAGE (REPÈRE STABLE)');
+    console.log(`X : ${x.toFixed(1)}px | ${percentX}%`);
+    console.log(`Y : ${y.toFixed(1)}px | ${percentY}%`);
     console.log('--- HTML À COPIER ---');
     console.log(
-        `<div class="clickable-zone" data-index="X" data-top="${pxTop.toFixed(1)}px" data-left="${percentLeft}%">X</div>`
+        `<div class="clickable-zone" data-top="${y.toFixed(1)}px" data-left="${percentX}%"></div>`
     );
 });
 </script>
 
+
 </body>
 </html>
+
 
 
 
